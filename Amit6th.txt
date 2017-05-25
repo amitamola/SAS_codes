@@ -1,0 +1,114 @@
+data hold;                                                                                                                              
+set sashelp.class;                                                                                                                      
+OR+weight;                                                                                                                              
+/*That's how you hold your values and make another column. If it was like weight+OR... it would give blanks as it will create           
+OR named columns with missing values and then add to weight. Well we want cumulative... that's why we need to form it the way it's      
+written.*/                                                                                                                              
+run;                                                                                                                                    
+                                                                                                                                        
+data do_check;                                                                                                                          
+do l=1 to 100;                                                                                                                          
+end;                                                                                                                                    
+/*The output thing here is by default after the end... which we see below and it gives same result.*/                                   
+run;                                                                                                                                    
+                                                                                                                                        
+data do_check1;                                                                                                                         
+do l=1 to 100;                                                                                                                          
+output;                                                                                                                                 
+/*This one will give all the numbers from 1 to 100*/                                                                                    
+end;                                                                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+data do_check2;                                                                                                                         
+do l=1 to 100;                                                                                                                          
+end;                                                                                                                                    
+output;                                                                                                                                 
+/*This will give same value as of first do_check... as output is at end and after the loop ends.*/                                      
+run;                                                                                                                                    
+                                                                                                                                        
+data do_check3;                                                                                                                         
+do l=0 to 100 by 2;                                                                                                                     
+output;                                                                                                                                 
+end;                                                                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+data do_check4;                                                                                                                         
+k=17;                                                                                                                                   
+do i=1 to 10;                                                                                                                           
+j=k*i;                                                                                                                                  
+output;                                                                                                                                 
+end;                                                                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+data do_dummy;                                                                                                                          
+k=0;                                                                                                                                    
+do i=1 to 10;                                                                                                                           
+k+17;                                                                                                                                   
+output;                                                                                                                                 
+end;                                                                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+data do_check5;                                                                                                                         
+p=100000;                                                                                                                               
+r=0.09;                                                                                                                                 
+do i=1 to 5;                                                                                                                            
+p+p*r;                                                                                                                                  
+output;                                                                                                                                 
+end;                                                                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+data do_check6;                                                                                                                         
+p=100000;                                                                                                                               
+r=0.09;                                                                                                                                 
+do i=1 to 5;                                                                                                                            
+p+p*r;                                                                                                                                  
+end;                                                                                                                                    
+output;                                                                                                                                 
+/*We see here the i will get value 6 as output is outside but the p will remain same as it wasn't executed at all.                      
+Only i was incremented.*/;                                                                                                              
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+data do_check7;                                                                                                                         
+p=100000;                                                                                                                               
+r=0.09;                                                                                                                                 
+do until (p ge 200000);                                                                                                                 
+year+1;                                                                                                                                 
+p+p*r;                                                                                                                                  
+output;                                                                                                                                 
+end;                                                                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+data put_input;                                                                                                                         
+x1=0;                                                                                                                                   
+x2=put(x1,date9.);                                                                                                                      
+x3=put(x1,mmddyy10.);                                                                                                                   
+xdummy=put(x1,date7.);                                                                                                                  
+x4=input(x2,date9.);                                                                                                                    
+/*A format works like an informat when we use it with input command. But remember that this can be done using the same format           
+which was used to change it into character. The below one will give an error.*/                                                         
+x5=input(x3,date9.);                                                                                                                    
+*this one should give an error*;                                                                                                        
+x6=mdy(01,29,17);                                                                                                                       
+format x6 date9.;                                                                                                                       
+/*We see that here we have changed a number above to a date... though if u see the column... u will see it's still a numeric value.     
+So we still can use it for numeric operations.*/                                                                                        
+x7=x6-365;                                                                                                                              
+format x7 date9.;                                                                                                                       
+x8=today();                                                                                                                             
+format x8 date9.;                                                                                                                       
+x9="18May1994"D;                                                                                                                        
+*This will give you the number related to the date in SAS.*;                                                                            
+x10='4:30'T;                                                                                                                            
+/*This one will give the seconds from 12 o clock to 4:30am*/                                                                            
+x11="18May1994:2:00"DT;                                                                                                                 
+/*This one will tell the second from 1 jan 1960 to this date and time above.*/                                                          
+x12=weekday(x9);                                                                                                                        
+x13=datepart(x11);                                                                                                                      
+x14=timepart(x11);                                                                                                                      
+x15=intck("year",x9,x6);                                                                                                                
+x16=intnx("year",x9,33,"e");                                                                                                            
+/*Here e at the end will give last day of that year... b will give beginning... m will give middle day of the year and s will give      
+same day.*/;                                                                                                                            
+format x16 date9.;                                                                                                                      
+run;

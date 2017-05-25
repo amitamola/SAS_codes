@@ -1,0 +1,155 @@
+Proc SQL;                                                                                                                               
+create table x1 as                                                                                                                      
+select *                                                                                                                                
+                                                                                                                                        
+from sashelp.class;                                                                                                                     
+/*Here sashelp.class is our superset*/                                                                                                  
+quit;                                                                                                                                   
+/*Usually while using SQL only three time we would need a semicolon.*/                                                                  
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+select *                                                                                                                                
+from sashelp.class;                                                                                                                     
+/*Here we don't have any table being created so SAS will give an output like Procedure print does.*/                                    
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x2 as                                                                                                                      
+select                                                                                                                                  
+name,age,weight                                                                                                                         
+from sashelp.class;                                                                                                                     
+/*Above if we change the sequence, the sequence will definitely change, that's the thing only done via SQL. Here we dropped             
+other columns and took some and can change the sequence too.*/                                                                          
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x2 as                                                                                                                      
+select                                                                                                                                  
+name as naam,age,weight                                                                                                                 
+/*Here we did renaming as well along with the above functions.*/                                                                        
+from sashelp.class;                                                                                                                     
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x3 as                                                                                                                      
+select                                                                                                                                  
+name,age,weight                                                                                                                         
+from sashelp.class where sex='M';                                                                                                       
+/*Here we used where to select some of all...selective selection.*/                                                                     
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x4 as                                                                                                                      
+select                                                                                                                                  
+distinct(age)                                                                                                                           
+from sashelp.class;                                                                                                                     
+/*This one will select and give distinct values in age column*/                                                                         
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x5 as                                                                                                                      
+select                                                                                                                                  
+sum(weight) as sum_weight,                                                                                                              
+sum(height) as sum_height                                                                                                               
+                                                                                                                                        
+from sashelp.class;                                                                                                                     
+/*This way we calculate the sum of a column and we need to rename it coz it will create a column name a TEMP kind.                      
+So while using an arithmetic operator remember to use as to rename it.*/                                                                
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x6 as                                                                                                                      
+select                                                                                                                                  
+sum(weight) as sum_weight, sex                                                                                                          
+                                                                                                                                        
+from sashelp.class                                                                                                                      
+group by 2;                                                                                                                             
+/*Here we want to find the group selection of Males and Females differently. So while selection we would use group by below             
+the set from which data is being taken, so that's why below from sashelp.class. Moreover we used here group by 2 and not                
+group by sex, coz both will give same result as 2nd column is sex only and it will work perfectly. Remember that sex is second          
+column in our selected and new created table not the superset.*/                                                                        
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x7 as                                                                                                                      
+select                                                                                                                                  
+age, sex, sum(weight) as sum_weight                                                                                                     
+                                                                                                                                        
+from sashelp.class                                                                                                                      
+group by 1,2;                                                                                                                           
+/*Here we group with using age and sex as well.*/                                                                                       
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x7 as                                                                                                                      
+select                                                                                                                                  
+age, sex, sum(weight) as sum_weight                                                                                                     
+                                                                                                                                        
+from sashelp.class                                                                                                                      
+group by 1,2                                                                                                                            
+order by 3 descending;                                                                                                                  
+/*Here we are sorting using order by and as per use we can use descending to get descending values and not always                       
+ascending values.*/                                                                                                                     
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x8 as                                                                                                                      
+select *,                                                                                                                               
+/*Remember comma here represent creation of a new column which we are creating below that's why we are using a comma.*/                 
+Case                                                                                                                                    
+when weight<100 then 'Underweight'                                                                                                      
+else 'Overweight'                                                                                                                       
+end as flag_checkweight                                                                                                                 
+                                                                                                                                        
+from sashelp.class;                                                                                                                     
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x9 as                                                                                                                      
+select age, count(age) as count_age, max(weight) as max_weight, min(weight) as min_weight, sum(weight) as sum_weight                    
+from sashelp.class                                                                                                                      
+group by 1;                                                                                                                             
+/*I guess the above thing is self-explanatory.*/                                                                                        
+quit;                                                                                                                                   
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x10 as                                                                                                                     
+select name, substr(name, 1,3) as new_name                                                                                              
+from sashelp.class;                                                                                                                     
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x11 as                                                                                                                     
+select distinct(age), input(substr(compress(put(age,ddmmyy10.),'/'),5,4),4.) as year                                                    
+from sashelp.class;                                                                                                                     
+/*Here we first took year as character and then changed it into numeric using input.*/                                                  
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x12 as                                                                                                                     
+select name                                                                                                                             
+from sashelp.class where find(Upcase(name), 'A');                                                                                       
+/*We wanted the names containing a or A. So we can do this via this way or the below way. Both works.*/                                 
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table x13 as                                                                                                                     
+select name                                                                                                                             
+from sashelp.class where Upcase(name) ? 'A';                                                                                            
+/*We can do the above thing again with contain operator i.e. '?'.*/                                                                     
+quit;

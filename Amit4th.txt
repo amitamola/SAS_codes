@@ -1,0 +1,37 @@
+data wa_final (keep=customer_id ip_add x1 x2 x3 x4 x5 x6 x7 x8);                                                                        
+set wa;                                                                                                                                 
+x1=compress(ip_add);                                                                                                                    
+*This function if used without specifying anything after first parameter, it will remove all the blank spaces from your string.*;       
+x2=compress(ip_add,".");                                                                                                                
+*This time we will remove all the dots from the string.*;                                                                               
+x3=compress(ip_add,".S ");                                                                                                              
+*This above one will remove dots, all the capital S and the blanks too*;                                                                
+x4=compress(ip_add, ,"a");                                                                                                              
+*This will remove all the letters excluding numbers and special characters only.*;                                                      
+x5=compress(ip_add," ","kd");                                                                                                           
+*This will just keep digits only*;                                                                                                      
+x6=compress(substr(ip_add,1,13)," ","a");                                                                                               
+/*As we see we can use a function inside a function. Here substr will take out particular string only and then remove all the letters   
+from it*/;                                                                                                                              
+x7=scan(ip_add,3);                                                                                                                      
+x8=scan(ip_add,1,".")||"."||scan(ip_add,2,".")||"."||scan(ip_add,3,".")||"."||compress(scan(ip_add,4,".")," ","a");                     
+run;                                                                                                                                    
+                                                                                                                                        
+data check_find;                                                                                                                        
+x1="There is the dog";                                                                                                                  
+x2=find(x1,"the");                                                                                                                      
+*Remember the values in quote is case sensitive*;                                                                                       
+x3=findc(x1,"the");                                                                                                                     
+/*This time it will tell the position of any character which SAS will find first of all the letters in 'the'... so here we will get     
+answer 2 as SAS will find h right away.*/;                                                                                              
+x4=findw(x1,"si");                                                                                                                      
+x5=findw(x1,"is");                                                                                                                      
+x6=find(x1,"re");                                                                                                                       
+x7=index(x1,"re");                                                                                                                      
+/*Here above we can see the difference between findw function and index function. findw finds a work as whole whereas index finds       
+that part*/;                                                                                                                            
+x8=translate(x1,"g","d");                                                                                                               
+x9=translate(x1,"ak","tT");                                                                                                             
+*Here translate function will change tT with ak. It reads letter by letter.*;                                                           
+x10=tranwrd(x1,"dog","cat");                                                                                                            
+run;

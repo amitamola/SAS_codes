@@ -1,0 +1,121 @@
+*My first SAS program;
+Libname OR "C:\Users\AmOLa's\Desktop\College SAS";
+
+Data Work.x1;
+Set Sashelp.class;
+Run;
+
+Data OR.x2;
+Set Sashelp.class;
+Run;
+*My first SAS program;
+Libname OR "C:\Users\AmOLa's\Desktop\College SAS";
+
+
+Data Work.x1;
+Set Sashelp.class;
+Run;
+
+Data OR.x2;
+Set Sashelp.class;
+Run;
+
+Data OR.x3;
+Set Work.x1;
+Run;
+*My first SAS program;
+Libname OR "C:\Users\AmOLa's\Desktop\College SAS";
+
+
+Data Work.x1;
+Set Sashelp.class;
+Run;
+
+Data OR.x2;
+Set Sashelp.class;
+Run;
+
+Data OR.x3;
+Set Work.x1;
+if weight>100;
+Run;
+
+Data Work.x4;
+Set OR.x2;
+if weight>100 & sex='M';
+Run;
+*My first SAS program;
+Libname OR "C:\Users\AmOLa's\Desktop\College SAS";
+
+
+Data Work.x1;
+Set Sashelp.class;
+Run;
+
+Data OR.x2;
+Set Sashelp.class;
+Run;
+
+Data OR.x3;
+Set Work.x1;
+if weight>100;
+Run;
+
+Data Work.x4;
+Set OR.x2;
+if weight>100 & sex='M';
+Run;
+
+Data col;
+Set sashelp.class;
+x1=weight*1.5;
+x2=x1-weight;
+if weight>100 then x3=1; else x3=0;
+run;
+*My first SAS program;
+Libname OR "C:\Users\AmOLa's\Desktop\College SAS";
+
+
+Data Work.x1;
+Set Sashelp.class;
+Run;
+
+Data OR.x2;
+Set Sashelp.class;
+Run;
+
+Data OR.x3;
+Set Work.x1;
+if weight>100;
+Run;
+
+Data Work.x4;
+Set OR.x2;
+if weight>100 & sex='M';
+Run;
+
+Data col;
+Set sashelp.class;
+x1=weight*1.5;
+x2=x1-weight;
+if weight>100 then x3=1; else x3=0;
+if weight<100 then x4='underweight'; else x4='overweight';
+run;
+
+Data colpart;
+x1=2.5;
+x2=-2.5;
+run;
+
+data incomeclean;
+set or.income;
+if customer_id ne .;
+abs_income=abs(monthly_income);
+round_income=round(abs_income);
+diff=round_income-abs_income;
+if diff=0 then flag="NPNL"; else if diff>0 then flag="Prof"; else flag="Loss";
+run;
+
+Proc freq data=incomeclean;
+table flag;
+run;

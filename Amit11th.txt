@@ -1,0 +1,86 @@
+data check_informat;                                                                                                                          
+input id;                                                                                                                                     
+informat id comma6.1;                                                                                                                         
+/*This way we are telling SAS that the informat is comma6. with decimal places 1.*/                                                           
+cards;                                                                                                                                        
+12,456.9                                                                                                                                      
+12,457                                                                                                                                        
+12,458                                                                                                                                        
+;                                                                                                                                             
+run;                                                                                                                                          
+                                                                                                                                              
+data check_informat1;                                                                                                                         
+input id comma6.;                                                                                                                             
+/*Here SAS will identify the values as numbers itself. U can see the difference b/w informats of the above one and below one.*/               
+cards;                                                                                                                                        
+12,456                                                                                                                                        
+12,457                                                                                                                                        
+12,458                                                                                                                                        
+;                                                                                                                                             
+run;                                                                                                                                          
+                                                                                                                                              
+data check_pointer;                                                                                                                           
+input id id1 id2;                                                                                                                             
+cards;                                                                                                                                        
+1 2 3 4 5 6 7 8 9                                                                                                                             
+10 11 12                                                                                                                                      
+;                                                                                                                                             
+/*You will see that SAS will read only vertically 3 column values only.*/                                                                     
+run;                                                                                                                                          
+                                                                                                                                              
+data check_pointer;                                                                                                                           
+input id id1 id2 @@;                                                                                                                          
+cards;                                                                                                                                        
+1 2 3 4 5 6 7 8 9                                                                                                                             
+10 11 12                                                                                                                                      
+;                                                                                                                                             
+/*If we use column pointer @@... then SAS will read the values vertically and horizontally as well and thus we will get all the               
+vlaues coz they are multiple of 3.*/                                                                                                          
+run;                                                                                                                                          
+                                                                                                                                              
+                                                                                                                                              
+data check_hello;                                                                                                                             
+input x1 $ x2 $ x3 x4 x5 x6;                                                                                                                  
+cards;                                                                                                                                        
+A B                                                                                                                                           
+1 2                                                                                                                                           
+3 4                                                                                                                                           
+C D                                                                                                                                           
+5 6                                                                                                                                           
+7 8                                                                                                                                           
+E F                                                                                                                                           
+10 11                                                                                                                                         
+12 13                                                                                                                                         
+;                                                                                                                                             
+run;                                                                                                                                          
+                                                                                                                                              
+                                                                                                                                              
+data check_hello1;                                                                                                                            
+input x1 $ x2 $ / x3 x4 / x5 x6;                                                                                                              
+cards;                                                                                                                                        
+A B 1 2                                                                                                                                       
+3 4                                                                                                                                           
+C D 5 6                                                                                                                                       
+7 8                                                                                                                                           
+E F 10 11                                                                                                                                     
+12 13                                                                                                                                         
+;                                                                                                                                             
+/*Here we see that SAS will just start reading from next line if it sees the slash.*/                                                         
+run;                                                                                                                                          
+                                                                                                                                              
+                                                                                                                                              
+data check_hello2;                                                                                                                            
+input x1 $ x2 $  x3 #2 x4 #3 x5 x6;                                                                                                           
+cards;                                                                                                                                        
+A B 1                                                                                                                                         
+2                                                                                                                                             
+3 4                                                                                                                                           
+C D 5                                                                                                                                         
+6                                                                                                                                             
+7 8                                                                                                                                           
+E F 10                                                                                                                                        
+11                                                                                                                                            
+12 13                                                                                                                                         
+;                                                                                                                                             
+/*SAS reads hash kinda similar way as slash. Hash tells the row number.*/                                                                     
+run;

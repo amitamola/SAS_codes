@@ -1,0 +1,162 @@
+data check_trim;                                                                                                                        
+x1="    amit   ";                                                                                                                       
+x2="   amola      ";                                                                                                                    
+x3=strip(x1)||"_"||strip(x2);                                                                                                           
+run;                                                                                                                                    
+                                                                                                                                        
+data m f;                                                                                                                               
+set sashelp.class;                                                                                                                      
+if sex="M" then output m;                                                                                                               
+else output f;                                                                                                                          
+run;                                                                                                                                    
+                                                                                                                                        
+data m f;                                                                                                                               
+set sashelp.class;                                                                                                                      
+if verify(sex,"M") then output m;                                                                                                       
+else output f;                                                                                                                          
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+data bb;                                                                                                                                
+input id name $6. ;                                                                                                                     
+cards;                                                                                                                                  
+01 ashish                                                                                                                               
+02 manoj                                                                                                                                
+03 raj                                                                                                                                  
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data ok notok ;                                                                                                                         
+set bb;                                                                                                                                 
+if verify (name,'ashish') then output ok;                                                                                               
+else output notok;                                                                                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+data ok notok ;                                                                                                                         
+set bb;                                                                                                                                 
+if verify (name,'raj') then output ok;                                                                                                  
+/*This won't give us any answer as we set the number of letters accepted in name column was 6                                           
+and Ashish was 6 long... but raj isn't. So to have Raj also used same way we will have to                                               
+use verify with three more spaces.*/                                                                                                    
+else output notok;                                                                                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+data m f;                                                                                                                               
+set sashelp.class;                                                                                                                      
+if sex="M" then output m;                                                                                                               
+else output f;                                                                                                                          
+if compare(sex,"M") then x1=1;                                                                                                          
+else x1=0;                                                                                                                              
+run;                                                                                                                                    
+/*We will see that this won't work as desired coz the work is being done after the data                                                 
+set has been created. Whereas we here use compare before it's being prepared. We will see                                               
+below how to do it.*/                                                                                                                   
+                                                                                                                                        
+data m f;                                                                                                                               
+set sashelp.class;                                                                                                                      
+if compare(sex,"M") then x1=1;                                                                                                          
+else x1=0;                                                                                                                              
+if sex="M" then output m;                                                                                                               
+else output f;                                                                                                                          
+run;                                                                                                                                    
+/*You can see that it's working now.*/                                                                                                  
+                                                                                                                                        
+data mf;                                                                                                                                
+set sashelp.class;                                                                                                                      
+if compare(sex,"M") then x1=1;                                                                                                          
+else x1=0;                                                                                                                              
+/*Here we see that as there is nothing to compare to after using compare, thus we will                                                  
+get opposite answers*/                                                                                                                  
+run;                                                                                                                                    
+                                                                                                                                        
+data mf1;                                                                                                                               
+set sashelp.class;                                                                                                                      
+if compare(sex,"M")=0 then x1=1;                                                                                                        
+else x1=0;                                                                                                                              
+/*Now we will get right values. Because earlier it would had taken value 0 as false and thus                                            
+it neglected the answer I expected.*/                                                                                                   
+run;                                                                                                                                    
+                                                                                                                                        
+data d1;                                                                                                                                
+set sashelp.class;                                                                                                                      
+if sex="M";                                                                                                                             
+run;                                                                                                                                    
+                                                                                                                                        
+data d2;                                                                                                                                
+set sashelp.class;                                                                                                                      
+if sex="M" and weight gt 100;                                                                                                           
+run;                                                                                                                                    
+                                                                                                                                        
+data d3;                                                                                                                                
+set sashelp.class;                                                                                                                      
+if sex="M" or weight>100;                                                                                                               
+run;                                                                                                                                    
+                                                                                                                                        
+data d4;                                                                                                                                
+set sashelp.class;                                                                                                                      
+if weight le 100 then delete;                                                                                                           
+run;                                                                                                                                    
+                                                                                                                                        
+data x1 x2;                                                                                                                             
+set sashelp.class;                                                                                                                      
+if age eq 12 then output x1;                                                                                                            
+else output x2;                                                                                                                         
+run;                                                                                                                                    
+                                                                                                                                        
+data a1 a2 a3 a4 a5 a6;                                                                                                                 
+set sashelp.class;                                                                                                                      
+if age eq 11 then output a1;                                                                                                            
+else if age eq 12 then output a2;                                                                                                       
+else if age eq 13 then output a3;                                                                                                       
+else if age eq 14 then output a4;                                                                                                       
+else if age eq 15 then output a5;                                                                                                       
+else output a6;                                                                                                                         
+run;                                                                                                                                    
+                                                                                                                                        
+data a1 a2 a3 a4 a5 a6;                                                                                                                 
+set sashelp.class;                                                                                                                      
+if age eq 11 then output a1;                                                                                                            
+else if age eq 12 then output a2;                                                                                                       
+else if age eq 13 then output a3;                                                                                                       
+else if age eq 14 then output a4;                                                                                                       
+else if age eq 15 then output a5;                                                                                                       
+else output a6;                                                                                                                         
+run;                                                                                                                                    
+                                                                                                                                        
+data d5;                                                                                                                                
+set sashelp.class;                                                                                                                      
+if weight gt 102.5 then                                                                                                                 
+do;                                                                                                                                     
+x1="Over weight ";                                                                                                                      
+end;                                                                                                                                    
+else                                                                                                                                    
+do;                                                                                                                                     
+x1="Under weight";                                                                                                                      
+end;                                                                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+data w1;                                                                                                                                
+set sashelp.class;                                                                                                                      
+where sex="M";                                                                                                                          
+run;                                                                                                                                    
+                                                                                                                                        
+data w3;                                                                                                                                
+set sashelp.class;                                                                                                                      
+where age in(12,14,16);                                                                                                                 
+run;                                                                                                                                    
+                                                                                                                                        
+data w4;                                                                                                                                
+set sashelp.class;                                                                                                                      
+where age not in(12,14,16);                                                                                                             
+run;                                                                                                                                    
+                                                                                                                                        
+data w5;                                                                                                                                
+set sashelp.class;                                                                                                                      
+where weight between 90 and 120;                                                                                                        
+run;                                                                                                                                    
+                                                                                                                                        
+data w6;                                                                                                                                
+set sashelp.class;                                                                                                                      
+where name ? "a" or name ? "A";                                                                                                         
+run;

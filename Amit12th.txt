@@ -1,0 +1,51 @@
+data check_pdv (drop=x1);                                                                                                               
+/*We are dropping x1 but using it too... so SAS uses PDV and it creates variables first and then                                        
+drop it later.*/                                                                                                                        
+set sashelp.class;                                                                                                                      
+x1=weight*4;                                                                                                                            
+x2=x1=weight;                                                                                                                           
+run;                                                                                                                                    
+                                                                                                                                        
+data check_pdv2 (drop=x1);                                                                                                              
+set sashelp.class;                                                                                                                      
+x2=x1=weight;                                                                                                                           
+x1=weight*4;                                                                                                                            
+/*Here the interesting thing is that SAS will create empty variable x1 and subtract... as we are                                        
+not using a function as its normal subtract, thus it will result x2 as . values.*/                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+ODS html file="C:\Users\AmOLa's\Desktop\College SAS\ODSfiles\logan.html";                                                               
+proc print data=sashelp.class;                                                                                                          
+run;                                                                                                                                    
+                                                                                                                                        
+ODS html close;                                                                                                                         
+                                                                                                                                        
+ODS rtf file="C:\Users\AmOLa's\Desktop\College SAS\ODSfiles\logan.rtf";                                                                 
+proc print data=sashelp.class;                                                                                                          
+run;                                                                                                                                    
+                                                                                                                                        
+ODS rtf close;                                                                                                                          
+                                                                                                                                        
+ODS pdf file="C:\Users\AmOLa's\Desktop\College SAS\ODSfiles\logan.pdf" Style=BarrettsBlue;                                              
+proc print data=sashelp.class;                                                                                                          
+run;                                                                                                                                    
+proc contents data=sashelp.class;                                                                                                       
+run;                                                                                                                                    
+ODS pdf close;                                                                                                                          
+                                                                                                                                        
+                                                                                                                                        
+data check_ods;                                                                                                                         
+set sashelp.class;                                                                                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+proc sort data=check_ods;                                                                                                               
+by sex;                                                                                                                                 
+run;                                                                                                                                    
+                                                                                                                                        
+ods trace on;                                                                                                                           
+proc means data=check_ods;                                                                                                              
+by sex;                                                                                                                                 
+ods select Means.ByGroup2.Summary;                                                                                                      
+run;                                                                                                                                    
+ods trace off;

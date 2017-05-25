@@ -1,0 +1,81 @@
+Data Class;
+Input Score @@;
+cards;
+56 78 84 73 90 44 76 87 92 75 85 67 90 84 74 64 73 78 69 56 87 73 100 54 81 78 69 64 73 65
+;
+run;
+
+PROC UNIVARIATE DATA=class;
+run;
+
+PROC UNIVARIATE DATA = class;
+VAR Score;
+RUN;
+
+PROC UNIVARIATE Normal DATA = class;
+VAR Score;
+RUN;
+
+Data Class1;
+Input Score Television Excercise @@;
+cards;
+56 6 2 78 7 4 84 5 5 73 4 0 90 3 4 44 9 0 76 5 1 87 3 3 92 2 7 75 8 3 85 1 6 67 4 2 90 5 5 84 6 5 74 5 2 64 4 1 73 0 5 78 5 2 69 6 1 56 7 1 87 8 4 73 8 3 100 0 6 54 8 0 81 5 4 78 5 2 69 4 1 64 7 1 73 7 3
+65 6 2
+;
+run;
+
+
+Proc Corr data = class1;
+var Score;
+with Television Excercise;
+run;
+
+Data regression;
+input Height Distance @@;
+cards;
+50 110 49 135 48 129 53 150 48 124 50 143 51 126 45 107 53 146 50 154 47 136 52 144 47 124 50 133 50 128 50 118 48 135 47 129 45 126 48 118 45 121 53 142 46 122 47 119 51 134 49 130 46 132 51 144 50 132 50 131
+;
+run;
+
+Proc reg data = regression;
+model Distance = Height;
+run;
+
+
+PROC REG DATA = regression;
+MODEL Distance = Height;
+PLOT Distance * Height;
+TITLE 'Results of Regression Analysis';
+RUN;
+
+Data Anova;
+input Team $ Height @@;
+cards;
+red 55 red 48 red 53 red 47 red 51 red 43 red 45 red 46 red 55 red 54 red 45 red 52 blue 46 blue 56 blue 48 blue 47 blue 54 blue 52 blue 49 blue 51 blue 45 blue 48 blue 55 blue 47 gray 55 gray 45 gray 47 gray 56 gray 49 gray 53 gray 48 gray 53 gray 51 gray 52 gray 48 gray 47 pink 53 pink 53 pink 58 pink 56 pink 50 pink 55 pink 59 pink 57 pink 49 pink 55 pink 56 pink 57 gold 53 gold
+ 55 gold 48 gold 45 gold 47 gold 56 gold 55 gold 46 gold 47 gold 53 gold 51 gold 50
+;
+run;
+
+
+PROC ANOVA DATA = Anova;
+CLASS Team;
+MODEL Height = Team;
+MEANS Team / SCHEFFE;
+RUN;
+
+Data Anova;
+input Team $ Height @@;
+cards;
+red 55 red 48 red 53 red 47 red 51 red 43 red 45 red 46 red 55 red 54 red 45 red 52 blue 46 blue 56 blue 48 blue 47 blue 54 blue 52 blue 49 blue 51 blue 45 blue 48 blue 55 blue 47 gray 55 gray 45 gray 47 gray 56 gray 49 gray 53 gray 48 gray 53 gray 51 gray
+;
+run;
+
+
+PROC ANOVA DATA = Anova;
+CLASS Team;
+MODEL Height = Team;
+MEANS Team / SCHEFFE;
+RUN;
+
+
+

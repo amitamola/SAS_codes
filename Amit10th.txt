@@ -1,0 +1,195 @@
+data check_error;                                                                                                                       
+input id id1;                                                                                                                           
+cards;                                                                                                                                  
+a 2                                                                                                                                     
+3 4                                                                                                                                     
+5                                                                                                                                       
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data check_all;                                                                                                                         
+input id id1;                                                                                                                           
+cards;                                                                                                                                  
+100 1000                                                                                                                                
+100 980                                                                                                                                 
+99 700                                                                                                                                  
+99 500                                                                                                                                  
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+proc sort data=check_all;                                                                                                               
+by _all_;                                                                                                                               
+run;                                                                                                                                    
+                                                                                                                                        
+data check_all;                                                                                                                         
+input id id1 id2;                                                                                                                       
+cards;                                                                                                                                  
+100 1000 2                                                                                                                              
+100 980 7                                                                                                                               
+99 500 3                                                                                                                                
+99 500 1                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+proc sort data=check_all;                                                                                                               
+by _all_;                                                                                                                               
+/*This _all_ thing doesn't just see if two first column thing are same... it checks for all                                             
+column values till it finds smaller one.*/                                                                                              
+run;                                                                                                                                    
+                                                                                                                                        
+data _null_;                                                                                                                            
+/*This will not create any dataset... _null_ is a name that can be used to check the code before executing as often                     
+while using SQL the code is created first and then executed and what if it was wrong and the data will have to be executed              
+again!*/                                                                                                                                
+input id id1 id2;                                                                                                                       
+cards;                                                                                                                                  
+100 1000 2                                                                                                                              
+100 980 7                                                                                                                               
+99 500 3                                                                                                                                
+99 500 1                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data check_first;                                                                                                                       
+input id id1;                                                                                                                           
+cards;                                                                                                                                  
+101 1000                                                                                                                                
+102 2000                                                                                                                                
+102 3000                                                                                                                                
+102 4000                                                                                                                                
+103 5000                                                                                                                                
+103 6000                                                                                                                                
+104 7000                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data first;                                                                                                                             
+set check_first;                                                                                                                        
+by id;                                                                                                                                  
+if first.id;                                                                                                                            
+run;                                                                                                                                    
+                                                                                                                                        
+data last;                                                                                                                              
+set check_first;                                                                                                                        
+by id;                                                                                                                                  
+if last.id;                                                                                                                             
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+data check_label;                                                                                                                       
+set sashelp.class;                                                                                                                      
+label age= "aapki age kya hai?";                                                                                                        
+run;                                                                                                                                    
+                                                                                                                                        
+proc contents data=check_label;                                                                                                         
+run;                                                                                                                                    
+                                                                                                                                        
+data check_drop (drop=name weight);                                                                                                     
+set sashelp.class;                                                                                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+data check_keep (keep= name weight);                                                                                                    
+set sashelp.class;                                                                                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+data check_rename(rename=(name=naam));                                                                                                  
+set sashelp.class;                                                                                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+data check_f;                                                                                                                           
+infile cards firstobs=6;                                                                                                                
+input id id1;                                                                                                                           
+cards;                                                                                                                                  
+1 1000                                                                                                                                  
+2 2000                                                                                                                                  
+3 3000                                                                                                                                  
+4 4000                                                                                                                                  
+5 5000                                                                                                                                  
+6 6000                                                                                                                                  
+7 7000                                                                                                                                  
+8 8000                                                                                                                                  
+9 9000                                                                                                                                  
+10 10000                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data check_f;                                                                                                                           
+infile cards obs=5;                                                                                                                     
+input id id1;                                                                                                                           
+cards;                                                                                                                                  
+1 1000                                                                                                                                  
+2 2000                                                                                                                                  
+3 3000                                                                                                                                  
+4 4000                                                                                                                                  
+5 5000                                                                                                                                  
+6 6000                                                                                                                                  
+7 7000                                                                                                                                  
+8 8000                                                                                                                                  
+9 9000                                                                                                                                  
+10 10000                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+data check_error;                                                                                                                       
+infile cards missover;                                                                                                                  
+input id id1 id2;                                                                                                                       
+cards;                                                                                                                                  
+1 2                                                                                                                                     
+a 4                                                                                                                                     
+5                                                                                                                                       
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data check_error1;                                                                                                                      
+infile cards truncover;                                                                                                                 
+input id id1 id2;                                                                                                                       
+cards;                                                                                                                                  
+1 2                                                                                                                                     
+a 4                                                                                                                                     
+5                                                                                                                                       
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data check_out;                                                                                                                         
+infile cards delimiter=",";                                                                                                             
+input id id1 id2;                                                                                                                       
+cards;                                                                                                                                  
+1,2,3                                                                                                                                   
+4,5,6                                                                                                                                   
+7,8,9                                                                                                                                   
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+data check_out;                                                                                                                         
+infile cards delimiter="," missover;                                                                                                    
+/*This won't help as it won't give the output we want.*/                                                                                
+input id id1 id2;                                                                                                                       
+cards;                                                                                                                                  
+1,2,3                                                                                                                                   
+,,6                                                                                                                                     
+,8,9                                                                                                                                    
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data check_out1;                                                                                                                        
+infile cards delimiter="," dsd;                                                                                                         
+/*This won't help as it won't give the output we want.*/                                                                                
+input id id1 id2;                                                                                                                       
+cards;                                                                                                                                  
+1,2,3                                                                                                                                   
+,,6                                                                                                                                     
+,8,9                                                                                                                                    
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+title "kya print karna hai?";                                                                                                           
+/*Don't use title1 next...as title used before itself is title1.*/                                                                      
+title2 "kuch print nai karna hai?";                                                                                                     
+footnote "ok bye";                                                                                                                      
+proc print data=sashelp.class;                                                                                                          
+run;

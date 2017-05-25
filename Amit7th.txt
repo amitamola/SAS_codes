@@ -1,0 +1,81 @@
+data check_sort;                                                                                                                        
+set sashelp.class;                                                                                                                      
+                                                                                                                                        
+proc sort data=check_sort; by sex;                                                                                                      
+run;                                                                                                                                    
+                                                                                                                                        
+proc print data=check_sort;by sex;                                                                                                      
+sum weight;                                                                                                                             
+sum height;                                                                                                                             
+var name;                                                                                                                               
+run;                                                                                                                                    
+                                                                                                                                        
+proc contents data=check_sort directory varnum;                                                                                         
+run;                                                                                                                                    
+                                                                                                                                        
+proc freq data=check_sort;by sex;                                                                                                       
+table age;                                                                                                                              
+run;                                                                                                                                    
+                                                                                                                                        
+proc freq data=check_sort;                                                                                                              
+table sex*age/norow;                                                                                                                    
+run;                                                                                                                                    
+/*As we see above, we can use both ways to find specific sex's age frequencies. The above one will give me cross table which is         
+quite efficient as well and the below one that I did is helping me to find specific sex's age frequency.*/                              
+                                                                                                                                        
+proc freq data=check_sort;                                                                                                              
+table sex*age/norow nocolumn nopercentage;                                                                                              
+run;                                                                                                                                    
+/*Though this is wrong- the nocolumn and nopercentage... but SAS will change it itself and correct it. SAS IS SMART.*/                  
+                                                                                                                                        
+data x1;                                                                                                                                
+input id amt1;                                                                                                                          
+cards;                                                                                                                                  
+101 1000                                                                                                                                
+102 2000                                                                                                                                
+102 2000                                                                                                                                
+102 2001                                                                                                                                
+103 3000                                                                                                                                
+103 3001                                                                                                                                
+104 4000                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+proc sort data=x1 out=x2;                                                                                                               
+by id;                                                                                                                                  
+run;                                                                                                                                    
+                                                                                                                                        
+proc sort data=x1 out=x3 nodup;                                                                                                         
+by id;                                                                                                                                  
+run;                                                                                                                                    
+/*This will remove the duplicate values that have all the values in all variables same. But interesting thing is that this will remove only those duplicates
+that are right next to eachother. They ought to be or else it won't be removes.*/                                                                                              
+                                                                                                                                        
+proc sort data=x1 out=x4 nodupkey;                                                                                                      
+by id;                                                                                                                                  
+run;                                                                                                                                    
+/*This will only keep the non-duplicate id values and remove others and will keep the first value of amt1 and will not see if it's      
+large or small...etc*/                                                                                                                  
+                                                                                                                                        
+proc sort data=x1 out=m1 dupout=m2 nodup;                                                                                               
+by id;                                                                                                                                  
+run;                                                                                                                                    
+                                                                                                                                        
+proc sort data=x1 out=m3 dupout=m4 nodupkey;                                                                                            
+by id;                                                                                                                                  
+run;                                                                                                                                    
+                                                                                                                                        
+proc format;                                                                                                                            
+value ak        11='a'                                                                                                                  
+                12='b'                                                                                                                  
+                13='c'                                                                                                                  
+                14='d'                                                                                                                  
+                15='e'                                                                                                                  
+                16='f'                                                                                                                  
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data check_format;                                                                                                                      
+set sashelp.class;                                                                                                                      
+format age ak.;                                                                                                                         
+run;

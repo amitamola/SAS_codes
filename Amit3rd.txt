@@ -1,0 +1,96 @@
+data work.x1;                                                                                                                           
+input id;                                                                                                                               
+cards;                                                                                                                                  
+101                                                                                                                                     
+102                                                                                                                                     
+103                                                                                                                                     
+;                                                                                                                                       
+ *remember to put semicolon after the values or else 103 won't be taken as a value;                                                     
+run;                                                                                                                                    
+                                                                                                                                        
+data work.x2;                                                                                                                           
+input id id1;                                                                                                                           
+cards;                                                                                                                                  
+101                                                                                                                                     
+102                                                                                                                                     
+103                                                                                                                                     
+;                                                                                                                                       
+*if two rows are there and only three values then SAS will skip the third value... they need to be in multiple of 2;                    
+run;                                                                                                                                    
+                                                                                                                                        
+data work.x5;                                                                                                                           
+input id id1;                                                                                                                           
+cards;                                                                                                                                  
+101 201                                                                                                                                 
+102 202                                                                                                                                 
+103 203                                                                                                                                 
+;                                                                                                                                       
+*if done like this above... SAS will input values in both the columns;                                                                  
+run;                                                                                                                                    
+                                                                                                                                        
+data work.x5;                                                                                                                           
+input id id2 $;                                                                                                                         
+cards;                                                                                                                                  
+101 wassup                                                                                                                              
+102 202                                                                                                                                 
+103 hello                                                                                                                               
+;                                                                                                                                       
+*if done like this above... SAS will input values in both the columns;                                                                  
+run;                                                                                                                                    
+                                                                                                                                        
+data work.x6;                                                                                                                           
+input id id1 $;                                                                                                                         
+cards;                                                                                                                                  
+101 201                                                                                                                                 
+102 Hello                                                                                                                               
+h ab                                                                                                                                    
+;                                                                                                                                       
+/*for making it a character type... we need to put $ after a column name... if you don't then it will take it as number and will take   
+it as missing value as we can see in first column*/;                                                                                    
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+*creating one superset from two different sets;                                                                                         
+data r6;                                                                                                                                
+set x5 x6;                                                                                                                              
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+data work.r7;                                                                                                                           
+input id id1;                                                                                                                           
+id2=id+id1;                                                                                                                             
+cards;                                                                                                                                  
+101 201                                                                                                                                 
+102 202                                                                                                                                 
+103 203                                                                                                                                 
+;                                                                                                                                       
+/*SAS uses Programming Data Vector technique... that is it first creates structure, then data values input and then the calculations    
+carried out that's why the addition was above the values given*/;                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+data work.r8;                                                                                                                           
+input id id1;                                                                                                                           
+id2=id+id1;                                                                                                                             
+id3=sum(id,id1);                                                                                                                        
+cards;                                                                                                                                  
+. 201                                                                                                                                   
+102 .                                                                                                                                   
+103 203                                                                                                                                 
+;                                                                                                                                       
+/*Here we are seeing the difference between a sum function and normal '+' sign. Remember that any mathematical operator used with a     
+missing value, it will give missing value only... whereas the Sum function will ignore it and take it as zero*/;                        
+run;                                                                                                                                    
+                                                                                                                                        
+Data k25;                                                                                                                               
+Set or.finance;                                                                                                                         
+if sale_q1<25000 then S1=.; else S1=sale_q1;                                                                                            
+if sale_q2<25000 then S2=.; else S2=sale_q2;                                                                                            
+if sale_q3<25000 then S3=.; else S3=sale_q3;                                                                                            
+if sale_q4<25000 then S4=.; else S4=sale_q4;                                                                                            
+x_n=n(s1,s2,s3,s4);                                                                                                                     
+x_nmiss=nmiss(s1,s2,s3,s4);                                                                                                             
+x_s1miss=missing(s1);                                                                                                                   
+x_largest=Largest(3, of sale_q1-sale_q4);                                                                                               
+Proc freq data=k25;                                                                                                                     
+tabe x_n x_nmiss x_s1miss;                                                                                                              
+run;

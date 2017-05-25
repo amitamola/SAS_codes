@@ -1,0 +1,169 @@
+                                                                                                                                
+data s1;                                                                                                                                
+input id1 amt1;                                                                                                                         
+cards;                                                                                                                                  
+101 1000                                                                                                                                
+102 2000                                                                                                                                
+103 3000                                                                                                                                
+104 4000                                                                                                                                
+107 5000                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+data s2;                                                                                                                                
+input id2 amt2;                                                                                                                         
+cards;                                                                                                                                  
+103 11000                                                                                                                               
+104 12000                                                                                                                               
+105 13000                                                                                                                               
+106 14000                                                                                                                               
+109 15000                                                                                                                               
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+data s3;                                                                                                                                
+input id3 amt3;                                                                                                                         
+cards;                                                                                                                                  
+103 21000                                                                                                                               
+104 22000                                                                                                                               
+107 23000                                                                                                                               
+108 24000                                                                                                                               
+109 25000                                                                                                                               
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+data s4;                                                                                                                                
+input id;                                                                                                                               
+cards;                                                                                                                                  
+101                                                                                                                                     
+102                                                                                                                                     
+103                                                                                                                                     
+104                                                                                                                                     
+105                                                                                                                                     
+106                                                                                                                                     
+107                                                                                                                                     
+108                                                                                                                                     
+109                                                                                                                                     
+110                                                                                                                                     
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table r1 as                                                                                                                      
+SELECT Nitika.*, Amit.amt1                                                                                                              
+/*In case Amit data base had more columns and wanted another one we would                                                               
+put comma and type as Amit.(column name)*/                                                                                              
+                                                                                                                                        
+                                                                                                                                        
+from s4 as Nitika,                                                                                                                      
+s1 as Amit                                                                                                                              
+where Nitika.id=Amit.id1;                                                                                                               
+/*In case we don't put a where clause, it will result in all the                                                                        
+permutation and combinations as cross-tabulated kind of way.*/                                                                          
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table r2 as                                                                                                                      
+Select A.*, B.*                                                                                                                         
+                                                                                                                                        
+                                                                                                                                        
+from s1 A                                                                                                                               
+left join s2 B                                                                                                                          
+on A.id1=B.id2;                                                                                                                         
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table r3 as                                                                                                                      
+Select A.*, B.*                                                                                                                         
+                                                                                                                                        
+                                                                                                                                        
+from s1 A                                                                                                                               
+right join s2 B                                                                                                                         
+on A.id1=B.id2;                                                                                                                         
+/*To give an allias it isn't always necessary to use 'as', as we see above.*/                                                           
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table r4 as                                                                                                                      
+Select A.*, B.*                                                                                                                         
+                                                                                                                                        
+                                                                                                                                        
+from s1 A                                                                                                                               
+inner join s2 B                                                                                                                         
+on A.id1=B.id2;                                                                                                                         
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table r5 as                                                                                                                      
+Select  A.*, B.amt1, C.amt2, D.amt3                                                                                                     
+                                                                                                                                        
+                                                                                                                                        
+from s4 A                                                                                                                               
+inner join s1 B                                                                                                                         
+on A.id=B.id1                                                                                                                           
+inner join s2 C                                                                                                                         
+on A.id=C.id2                                                                                                                           
+inner join s3 D                                                                                                                         
+on A.id=D.id3;                                                                                                                          
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+Proc SQL;                                                                                                                               
+create table r7 as                                                                                                                      
+Select E.*                                                                                                                              
+                                                                                                                                        
+                                                                                                                                        
+from (Select A.*, B.*, C.*, D.*,                                                                                                        
+Sum(B.amt1, C.amt2, D.amt3) as sum_amt                                                                                                  
+                                                                                                                                        
+from  s4 A                                                                                                                              
+inner join s1 B                                                                                                                         
+on A.id=B.id1                                                                                                                           
+inner join s2 C                                                                                                                         
+on A.id=C.id2                                                                                                                           
+inner join s3 D                                                                                                                         
+on A.id=D.id3 ) E;                                                                                                                      
+/*Remember that E now contains all the variable columns so we can't                                                                     
+use A or B or C or D in our primary Select command and thus we can only use                                                             
+variables in E.*/                                                                                                                       
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+                                                                                                                                        
+Proc sql;                                                                                                                               
+create table R8 as                                                                                                                      
+select *,mean(weight) as Mean_weight                                                                                                    
+                                                                                                                                        
+from Sashelp.class                                                                                                                      
+having mean_weight lt weight;                                                                                                           
+/*if we want to use a variale just created above then 'where' can't                                                                     
+be used, and thus we use 'having'*/                                                                                                     
+quit;                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+data abc_1;                                                                                                                             
+input A $ B $ C ;                                                                                                                       
+cards ;                                                                                                                                 
+S T 2000                                                                                                                                
+;                                                                                                                                       
+run;                                                                                                                                    
+                                                                                                                                        
+                                                                                                                                        
+proc sql;                                                                                                                               
+insert into abc_1 (A, B, C)                                                                                                             
+        values ('D', 'Q', 1000);                                                                                                        
+quit;   

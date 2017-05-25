@@ -1,0 +1,155 @@
+* class 16;
+
+Case study
+
+
+data id;
+drop f2 f3 f4;
+run;
+
+proc contents data = id; run;
+proc contents data = acq; run;
+proc contents data = payment; run;
+proc contents data = spend; run;
+
+
+* use contents to see variable name not its label;
+
+
+data payment (drop = f5);
+set payment;
+run;
+
+proc sort data = id ; by customer; run;
+proc sort data = acq; by customer; run;
+proc sort data = payment; by customer; run;
+proc sort data = spend; by customer; run;
+
+
+
+* check if there is any missing value;
+
+data payment;
+set payment;
+if customer ne " ";
+run;
+
+
+* now payment data has been cleaned as 23 obs were missing so it is cleaned;
+
+
+data acq_id;
+merge id(in = a) acq(in = b);
+by customer;
+if a and b;
+run;
+
+
+proc freq data = acq_id;
+table city credit_card_product;
+table city*credit_card_product /norow nocol nopercent;
+run;
+
+proc univariate data = acq_id;
+var current_internal_s;
+run;
+
+
+
+data internal_score;
+set acq_id;
+if current_internal_s < 253 then flag = "L1";
+else if current_internal_s < 329.5 then flag = "M1";
+else if current_internal_s < 416 then flag = "H1";
+else flag = "S1";
+run;
+
+
+* the numbers here are  q1 median and q2;
+
+
+proc freq data = internal_score;
+table customer_type*flag / norow nocol nopercent;
+run;
+
+
+
+proc sql;
+create table customer_spend as
+select type, sum(spendamount) as spend
+from spend
+group by 1
+order by 2 desc
+;
+run;
+
+
+
+
+proc sql;
+create table customer_spend_topten as
+select customer, sum(spendamount) as spend
+from spend
+group by 1
+order by 2 desc
+;
+run;
+
+
+
+proc sql;
+create table customer_spend_topten_type as
+select customer, type , sum(spendamount) as spend
+from spend
+group by 1,2
+order by 3 desc
+;
+run;
+
+
+
+proc sql;
+create table customer_payment as
+select customer, sum(amount) as payment
+from payment
+group by 1
+order by 2 desc
+;
+run;
+
+
+
+
+proc sort data = customer_spend_topten; by customer; run;
+proc sort data = customer_payment; by customer; run;
+
+
+
+data spend_payment;
+merge customer_spend_topten(in = a) customer_payment (in = b);
+by customer;
+if a and b;
+run;
+
+
+
+
+data spend_payment_cl;
+set spend_payment;
+cl = ((payment - spend)/payment) * 100 ;
+if cl<0 then flag1 = 1;
+else flag1=0;
+run;
+
+
+data cl_score;
+merge internal_score (in = a) spend_payment_cl ( in = b);
+by customer;
+if a and b;
+run;
+
+
+
+proc freq data = cl_score;
+table flag1*flag*customer_type;
+run;

@@ -1,0 +1,241 @@
+data check_sort;                                                                                                                                                               
+set sashelp.class;                                                                                                                                                             
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+proc sort data=check_sort; by sex;                                                                                                                                             
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+proc means data=check_sort;by sex;                                                                                                                                             
+run;                                                                                                                                                                           
+/*Remember use the variable same as used above with proc sort or it will give inane result or                                                                                  
+undesired results.*/                                                                                                                                                           
+                                                                                                                                                                               
+proc means data=check_sort;                                                                                                                                                    
+by sex;                                                                                                                                                                        
+/*This make two different datas.*/                                                                                                                                             
+class age;                                                                                                                                                                     
+/*This one forms sections as per age.*/                                                                                                                                        
+var weight;                                                                                                                                                                    
+/*This let us choose only one variable as to be used.*/                                                                                                                        
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+proc means data=check_sort;                                                                                                                                                    
+class age;                                                                                                                                                                     
+output out=R1;                                                                                                                                                                 
+/*The reason to use it is that we can't use any procedure on those what we used above as it was                                                                                
+a softcopy of our data as output. While if you change it into a hardcopy i.e. dataset... then                                                                                  
+we can use it, to use procedures on it.*/                                                                                                                                      
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+proc summary data=check_sort;                                                                                                                                                  
+class age;                                                                                                                                                                     
+/*This will give an error without use of output command. To it is a PART OF SYNTAX of Summary.*/                                                                               
+output out=R2;                                                                                                                                                                 
+var weight;                                                                                                                                                                    
+n(weight)=                                                                                                                                                                     
+/autoname autolabel;                                                                                                                                                           
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data long1 ;                                                                                                                                                                   
+input famid year faminc ;                                                                                                                                                      
+cards ;                                                                                                                                                                        
+1 96 40000                                                                                                                                                                     
+1 97 40500                                                                                                                                                                     
+1 98 41000                                                                                                                                                                     
+2 96 45000                                                                                                                                                                     
+2 97 45400                                                                                                                                                                     
+2 98 45800                                                                                                                                                                     
+3 96 75000                                                                                                                                                                     
+3 97 76000                                                                                                                                                                     
+3 98 77000                                                                                                                                                                     
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+proc transpose data=long1; /*If we don't type out here then it will create it's own data set named Data1, then Data2, etc*/                                                    
+by famid ;                                                                                                                                                                     
+id year;                                                                                                                                                                       
+/*SAS never forms a variable name with using number as first character... so we see in output of Data1 that the variable name is                                               
+as _96, _97, etc.*/                                                                                                                                                            
+var faminc;                                                                                                                                                                    
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+                                                                                                                                                                               
+data x1;                                                                                                                                                                       
+input id amt1;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+101 1000                                                                                                                                                                       
+102 2000                                                                                                                                                                       
+103 3000                                                                                                                                                                       
+104 4000                                                                                                                                                                       
+107 5000                                                                                                                                                                       
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data x2;                                                                                                                                                                       
+input id amt2;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+103 11000                                                                                                                                                                      
+104 12000                                                                                                                                                                      
+105 13000                                                                                                                                                                      
+106 14000                                                                                                                                                                      
+109 15000                                                                                                                                                                      
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data x3;                                                                                                                                                                       
+input id amt3;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+103 21000                                                                                                                                                                      
+104 22000                                                                                                                                                                      
+108 23000                                                                                                                                                                      
+109 24000                                                                                                                                                                      
+110 25000                                                                                                                                                                      
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data x4;                                                                                                                                                                       
+set x1 x2 x3;                                                                                                                                                                  
+/*These datas were already sorted, or else we should always sort out data before merging like this.*/                                                                          
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data x5;                                                                                                                                                                       
+set x1 x2 x3;                                                                                                                                                                  
+by id;                                                                                                                                                                         
+/*We can merge and sort simultaneously this way.*/                                                                                                                             
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data x2a;                                                                                                                                                                      
+input id amt1;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+103 11000                                                                                                                                                                      
+104 12000                                                                                                                                                                      
+105 13000                                                                                                                                                                      
+106 14000                                                                                                                                                                      
+109 15000                                                                                                                                                                      
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data x6;                                                                                                                                                                       
+update x1 x2a;                                                                                                                                                                 
+/*This will update the values of x1 with values of x2a and will form it in new variable. If you use x1 only as data set then                                                   
+it will make changes in x1 itself.*/                                                                                                                                           
+by amt1;                                                                                                                                                                       
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data m1;                                                                                                                                                                       
+merge x1 x2 x3;                                                                                                                                                                
+by id;                                                                                                                                                                         
+/*If we don't use by id here then this will take id values as last data sets and use all the amt values.*/                                                                     
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data m2;                                                                                                                                                                       
+merge x1 (in=kri) x2 (in=kj);                                                                                                                                                  
+by id;                                                                                                                                                                         
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data m3;                                                                                                                                                                       
+merge x1 (in=kri) x2 (in=kj);                                                                                                                                                  
+by id;                                                                                                                                                                         
+if kri;                                                                                                                                                                        
+/*This will only include x1's values as base values and if the other one has few valus too then it will tell them too.*/                                                       
+run;                                                                                                                                                                           
+/*This actually works like venn diagram's only kri part.*/                                                                                                                     
+                                                                                                                                                                               
+data m4;                                                                                                                                                                       
+merge x1 (in=kri) x2 (in=kj);                                                                                                                                                  
+by id;                                                                                                                                                                         
+if kj;                                                                                                                                                                         
+/*You can't use if condition in the data set name... that's why we used allias like kri and kj.*/                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data m5;                                                                                                                                                                       
+merge x1 (in=kri) x2 (in=kj);                                                                                                                                                  
+by id;                                                                                                                                                                         
+if kri and kj;                                                                                                                                                                 
+/*This will tell the values both have... that is their intersection.*/                                                                                                         
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data m6;                                                                                                                                                                       
+merge x1 (in=kri) x2 (in=kj);                                                                                                                                                  
+by id;                                                                                                                                                                         
+if not kri;                                                                                                                                                                    
+/*This mean kj-kri or ONLY KJ. Again the venn diagram thing.*/                                                                                                                 
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data m7;                                                                                                                                                                       
+merge x1 (in=kri) x2 (in=kj);                                                                                                                                                  
+by id;                                                                                                                                                                         
+if not kj;                                                                                                                                                                     
+/*This mean kri-kj or ONLY Kri. Again the venn diagram thing.*/                                                                                                                
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data m8;                                                                                                                                                                       
+merge x1 (in=kri) x2 (in=kj);                                                                                                                                                  
+by id;                                                                                                                                                                         
+if not (kri and kj);                                                                                                                                                           
+/*This mean all values except intersection.*/                                                                                                                                  
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+                                                                                                                                                                               
+                                                                                                                                                                               
+                                                                                                                                                                               
+                                                                                                                                                                               
+data r1;                                                                                                                                                                       
+input id amt1;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+101 1000                                                                                                                                                                       
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data r2;                                                                                                                                                                       
+input id amt2;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+101 11000                                                                                                                                                                      
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data r3;                                                                                                                                                                       
+input id amt3;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+101 21000                                                                                                                                                                      
+101 22000                                                                                                                                                                      
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data r4;                                                                                                                                                                       
+input id amt4;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+101 31000                                                                                                                                                                      
+101 32000                                                                                                                                                                      
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data r5;                                                                                                                                                                       
+input id amt5;                                                                                                                                                                 
+cards;                                                                                                                                                                         
+101 41000                                                                                                                                                                      
+101 42000                                                                                                                                                                      
+101 43000                                                                                                                                                                      
+;                                                                                                                                                                              
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data k1;                                                                                                                                                                       
+merge r1 r2;                                                                                                                                                                   
+by id;                                                                                                                                                                         
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data k2;                                                                                                                                                                       
+merge r1 r3;                                                                                                                                                                   
+by id;                                                                                                                                                                         
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data k3;                                                                                                                                                                       
+merge r3 r4;                                                                                                                                                                   
+by id;                                                                                                                                                                         
+run;                                                                                                                                                                           
+                                                                                                                                                                               
+data k4;                                                                                                                                                                       
+merge r4 r5;                                                                                                                                                                   
+by id;                                                                                                                                                                         
+run;
