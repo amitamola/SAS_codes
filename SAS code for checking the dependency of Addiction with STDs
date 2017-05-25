@@ -1,0 +1,102 @@
+LIBNAME mydata "/courses/d1406ae5ba27fe300 " access=readonly;
+
+DATA new;
+	set mydata.addhealth_pds;
+	KEEP AID H1TO15 H1TO32 H1TO36 H1TO39 H1TO42 H1CO16A H1CO16B H1CO16C H1CO16D H1CO16E 
+	H1CO16F H1CO16G H1CO16H H1CO16I H1CO16J H1FV5 H1FV7 H1FV8 H1FV10 Addict Alco Marijuana Coke Inhal Ille STD Violence;
+
+	
+	IF (H1TO15 EQ 7) OR (H1TO15 EQ 96) OR (H1TO15 EQ 97) OR (H1TO15 EQ 98) then  Alco=1;
+	ELSE IF (H1TO15 EQ 5) OR (H1TO15 EQ 6) then Alco=2;
+	ELSE IF (H1TO15 EQ 3) OR (H1TO15 EQ 4) then Alco=3;
+	ELSE Alco=4;
+	
+	IF (H1TO32 EQ 0) OR (H1TO32 EQ 996) OR (H1TO32 EQ 997) OR (H1TO32 EQ 998) OR (H1TO32 EQ 999) then  Marijuana=1;
+	ELSE IF (H1TO32 GE 1) AND (H1TO32 LE 10) then Marijuana=2;
+	ELSE IF (H1TO32 GE 11) AND (H1TO32 LE 99) then Marijuana=3;
+	ELSE Marijuana=4;
+	
+	IF (H1TO36 EQ 0) OR (H1TO36 EQ 996) OR (H1TO36 EQ 997) OR (H1TO36 EQ 998) OR (H1TO36 EQ 999) then  Coke=1;
+	ELSE IF (H1TO36 GE 1) AND (H1TO36 LE 2) then Coke=2;
+	ELSE IF (H1TO36 GE 3) AND (H1TO36 LE 5) then Coke=3;
+	ELSE Coke=4;
+	
+	IF (H1TO39 EQ 0) OR (H1TO39 EQ 996) OR (H1TO39 EQ 997) OR (H1TO39 EQ 998) OR (H1TO39 EQ 999) then  Inhal=1;
+	ELSE IF (H1TO39 GE 1) AND (H1TO39 LE 4) then Inhal=2;
+	ELSE IF (H1TO39 GE 5) AND (H1TO39 LE 29) then Inhal=3;
+	ELSE Inhal=4;
+	
+	IF (H1TO42 EQ 0) OR (H1TO42 EQ 996) OR (H1TO42 EQ 997) OR (H1TO42 EQ 998) OR (H1TO42 EQ 999) then  Ille=1;
+	ELSE IF (H1TO42 GE 1) AND (H1TO42 LE 2) then Ille=2;
+	ELSE IF (H1TO42 GE 3) AND (H1TO42 LE 10) then Ille=3;
+	ELSE Ille=4;
+	
+ 	IF (Alco EQ 4) OR (Marijuana EQ 4) OR (Ille EQ 4) OR (Inhal EQ 4) then Addict=4;
+ 	ELSE IF (Alco EQ 3) OR (Marijuana EQ 3) OR (Ille EQ 3) OR (Inhal EQ 3) then Addict=3;
+ 	ELSE IF (Alco EQ 2) OR (Marijuana EQ 2) OR (Ille EQ 2) OR (Inhal EQ 2) then Addict=2;
+	ELSE Addict=1;
+
+	IF (H1CO16A EQ 1) OR (H1CO16B EQ 1) OR (H1CO16C EQ 1) OR (H1CO16D EQ 1) OR 
+	   (H1CO16E EQ 1) OR (H1CO16F EQ 1) OR (H1CO16G EQ 1) OR (H1CO16H EQ 1) OR 
+	   (H1CO16I EQ 1) OR (H1CO16J EQ 1) then STD=1;
+	ELSE STD=0;
+
+	IF ((H1FV5 EQ 1) OR (H1FV5 EQ 2)) OR ((H1FV7 EQ 1) OR (H1FV7 EQ 2)) OR 
+	   ((H1FV8 EQ 1) OR (H1FV8 EQ 2)) OR ((H1FV10 NE 6) AND (H1FV10 NE 7) AND 
+	   (H1FV10 NE 8)) then Violence=1;
+	ELSE Violence=0;
+		
+	Label Addict="Addicted to either alcohol or any drug." 
+		  STD="Diagnosed with some kind of Sexually Transmitted Disease." 
+		  Violence="Indulged in some kind of violence recently.";
+
+Proc Format ;
+	Value Add 1="Doesn't use any alocohol or drug" 
+	          2="Experimentation Phase"
+	          3="Regular Use"
+	          4="Addiction";
+	Value ST  0="No" 
+	          1="Yes";
+	Value Vio 0="No" 
+	          1="Yes";
+
+Proc Freq ;
+	Tables STD*Addict/Chisq;
+	Format Addict add. STD ST. Violence Vio.;
+Run;
+
+Data Comparison1; set new;
+If Addict eq 1 or Addict eq 2;
+Proc sort;by aid;
+Proc Freq ;Table STD*Addict/Chisq;
+run;
+
+Data Comparison2; set new;
+If Addict eq 1 or Addict eq 3;
+Proc sort;by aid;
+Proc Freq ;Table STD*Addict/Chisq;
+run;
+
+Data Comparison3; set new;
+If Addict eq 1 or Addict eq 4;
+Proc sort;by aid;
+Proc Freq ;Table STD*Addict/Chisq;
+run;
+
+Data Comparison4; set new;
+If Addict eq 2 or Addict eq 3;
+Proc sort;by aid;
+Proc Freq ;Table STD*Addict/Chisq;
+run;
+
+Data Comparison5; set new;
+If Addict eq 2 or Addict eq 4;
+Proc sort;by aid;
+Proc Freq ;Table STD*Addict/Chisq;
+run;
+
+Data Comparison6; set new;
+If Addict eq 3 or Addict eq 4;
+Proc sort;by aid;
+Proc Freq ;Table STD*Addict/Chisq;
+run;
