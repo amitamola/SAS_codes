@@ -1,0 +1,16 @@
+LIBNAME mydata "/courses/d1406ae5ba27fe300 " access=readonly;
+
+DATA new;
+set mydata.gapminder;
+
+if incomeperperson ne .;
+
+IF incomeperperson LE 744.239 THEN incomegrp=1;
+ELSE IF incomeperperson LE 9425.236 THEN incomegrp=2;
+ELSE IF incomeperperson GE 9425.236 THEN incomegrp=3;
+                                                                                                                               
+PROC SORT; by incomegrp;
+
+Proc corr; var alcconsumption lifeexpectancy; by incomegrp; 
+Proc gplot;plot alcconsumption*lifeexpectancy;by incomegrp;
+run;
