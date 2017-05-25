@@ -1,0 +1,9 @@
+LIBNAME mydata "/courses/d1406ae5ba27fe300 " access=readonly;
+
+DATA new;
+set mydata.gapminder;                                                                                                                               
+Proc corr; var lifeexpectancy alcconsumption incomeperperson; 
+Proc gplot;plot alcconsumption*lifeexpectancy;
+Proc gplot;plot alcconsumption*incomeperperson;
+Proc gplot;plot lifeexpectancy *incomeperperson;
+run;
